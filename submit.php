@@ -20,10 +20,10 @@ $stmt = $conn->prepare($sql);
 $stmt->bind_param("sss", $name, $email, $course);
 
 if ($stmt->execute()) {
-    ech "Student registered successfully!<br><br><br><br>";
-    ech "Thanks for visiting our website";
+    echo "Student registered successfully!<br><br><br><br>";
+    echo "Thanks for visiting our website";
 } else {
-    ech "Error: " . $stmt->error;
+    echo "Error: " . $stmt->error;
 }
 
 $stmt->close();
