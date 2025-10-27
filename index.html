@@ -7,11 +7,8 @@
 
   <style>
     :root{
-      /* Change these two values to update page background */
-      --bg1:#e6ae14;           /* start color */
-      --bg2:#ACB6E5;           /* end color  */
-      /* To use a solid color instead, comment out body gradient below
-         and set:  --bg1:#0f172a;  --bg2:#0f172a; */
+      --bg1:#e6ae14;
+      --bg2:#ACB6E5;
       --card:#ffffff;
       --text:#2b2b2b;
       --muted:#6b7280;
@@ -28,8 +25,6 @@
       margin:0;
       font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,"Helvetica Neue",Arial,"Noto Sans",sans-serif;
       background: linear-gradient(120deg,var(--bg1),var(--bg2));
-      /* For a solid background instead of gradient, use:
-         background: var(--bg1); */
       min-height:100vh;
       display:grid;
       place-items:center;
@@ -172,10 +167,20 @@
       </div>
 
       <div class="row">
+        <!-- Updated Course Dropdown -->
         <div class="field">
           <label for="course">Course <span class="req" aria-hidden="true">*</span></label>
-          <input type="text" id="course" name="course" placeholder="e.g., B.Sc. Computer Science" required />
-          <div class="error" aria-live="polite">Course is required.</div>
+          <select id="course" name="course" required>
+            <option value="">-- Select Course --</option>
+            <option value="MCSA">MCSA</option>
+            <option value="MCITP">MCITP</option>
+            <option value="CCNA">CCNA</option>
+            <option value="CCIE">CCIE</option>
+            <option value="CCNP">CCNP</option>
+            <option value="Azure 104">Azure 104</option>
+            <option value="AWS">AWS</option>
+          </select>
+          <div class="error" aria-live="polite">Please select a course.</div>
         </div>
 
         <div class="field">
@@ -217,14 +222,14 @@
 
     form.addEventListener('input', (e)=>{
       const t = e.target;
-      if(!(t instanceof HTMLInputElement)) return;
+      if(!(t instanceof HTMLInputElement || t instanceof HTMLSelectElement)) return;
       if(t.id === 'number'){ t.value = t.value.replace(/\D+/g,''); }
       setValidity(t, t.checkValidity());
     });
 
     form.addEventListener('submit', (e)=>{
       let allGood = true;
-      [...form.querySelectorAll('input[required]')].forEach(inp=>{
+      [...form.querySelectorAll('input[required], select[required]')].forEach(inp=>{
         if(inp.id === 'number'){ inp.value = inp.value.replace(/\D+/g,''); }
         const ok = inp.checkValidity();
         setValidity(inp, ok);
@@ -232,10 +237,9 @@
       });
       if(!allGood){
         e.preventDefault();
-        form.querySelector('.field.invalid input')?.focus();
+        form.querySelector('.field.invalid input, .field.invalid select')?.focus();
         return;
       }
-      // Show a temporary success toast when staying on page
       setTimeout(()=> toast.classList.add('show'), 50);
       setTimeout(()=> toast.classList.remove('show'), 3000);
     });
